@@ -11,9 +11,13 @@ public class InteractHandler : MonoBehaviour
     public GameObject UIPrefab; 
 
     [FormerlySerializedAs("InteractableIcone")]
-    public Sprite InteractablePointer;
+    public Sprite ItemPointer;
+    public Sprite BoxPointer;
+    public Sprite LockPointer;
+    public Sprite ToolPointer;
+    public Sprite DefaultInteractPointer;
     public Sprite NormalPointer;
-    
+
     Image m_PointerImage;
     private Vector3 m_OriginalPointerSize;
 
@@ -78,8 +82,21 @@ public class InteractHandler : MonoBehaviour
 
         if (displayInteractable)
         {
-            m_PointerImage.sprite = InteractablePointer;
-            m_PointerImage.transform.localScale = m_OriginalPointerSize * 2.0f;
+            Sprite chosenPointer = DefaultInteractPointer;
+
+            var go = hit.collider.gameObject;
+
+            if (go.CompareTag("Item"))
+                chosenPointer = ItemPointer;
+            else if (go.CompareTag("Lock"))
+                chosenPointer = LockPointer;
+            else if (go.CompareTag("Tool"))
+                chosenPointer = ToolPointer;
+            else if (go.CompareTag("Box"))
+                chosenPointer = BoxPointer;
+
+            m_PointerImage.sprite = chosenPointer;
+            m_PointerImage.transform.localScale = m_OriginalPointerSize * 3.0f;
         }
         else
         {
