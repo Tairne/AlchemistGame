@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class PickupItem : MonoBehaviour
+public class PickupItem : MonoBehaviour, IInteractHint
 {
     public ItemData item;
+
+    public InteractAction GetAction() => InteractAction.Take;
 
     public void Pickup()
     {

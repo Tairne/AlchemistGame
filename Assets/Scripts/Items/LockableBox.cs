@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LockableBox : MonoBehaviour
+public class LockableBox : MonoBehaviour, IInteractHint
 {
     [Header("Key requirement")]
     [SerializeField] private ItemData requiredKey;
@@ -11,6 +11,16 @@ public class LockableBox : MonoBehaviour
     [SerializeField] private GameObject openedVisual; // optional: модель/крышка открытого состояния
     [SerializeField] private Animator animator;       // optional
     [SerializeField] private string openTrigger = "Open";
+
+    public InteractAction GetAction()
+    {
+        if (InventoryManager.Instance == null)
+            return InteractAction.None;
+
+        return InventoryManager.Instance.Inventory.Contains(requiredKey)
+            ? InteractAction.Open
+            : InteractAction.NeedKey;
+    }
 
     public void TryOpen()
     {
