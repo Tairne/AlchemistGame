@@ -5,5 +5,6 @@ public enum InteractAction
     None,
     Take,
     Open,
-    NeedKey
+    NeedKey,
+    Use
 }

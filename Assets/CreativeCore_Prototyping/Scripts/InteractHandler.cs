@@ -207,7 +207,8 @@ public class InteractHandler : MonoBehaviour
             InteractAction.Take => "[E] Взять",
             InteractAction.Open => "[E] Открыть",
             InteractAction.NeedKey => "Нужен ключ",
-            _ => ""
+            InteractAction.Use => "[E] Использовать",
+            _ => "Закрыто"
         };
     }
 
