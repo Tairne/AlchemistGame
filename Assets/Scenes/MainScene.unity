@@ -6681,6 +6681,10 @@ MonoBehaviour:
   titleText: {fileID: 0}
   actionText: {fileID: 0}
   hintRoot: {fileID: 0}
+  FistPointer: {fileID: 21300000, guid: b51aab52a6c1587418c250e2267e323b, type: 3}
+  dragLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &1410808665 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
@@ -9353,9 +9357,11 @@ GameObject:
   - component: {fileID: 1801972836}
   - component: {fileID: 1801972839}
   - component: {fileID: 1801972840}
+  - component: {fileID: 1801972842}
+  - component: {fileID: 1801972841}
   m_Layer: 0
   m_Name: Scull
-  m_TagString: Untagged
+  m_TagString: Move
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9419,7 +9425,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f9ebe3338396bdf48a738c629e577942, type: 2}
+  - {fileID: 2100000, guid: fa0d28709ec7d5746a1871f7fa595d02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9479,6 +9485,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: "\u0427\u0435\u0440\u0435\u043F"
+--- !u!114 &1801972841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801972834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e4f917adc79a1246affd2ebba53dc52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDragSeconds: 10
+  holdDistance: 2
+  spring: 1200
+  damper: 80
+  maxDistance: 0.2
+  breakForce: Infinity
+  breakTorque: Infinity
+--- !u!54 &1801972842
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801972834}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1831832641
 GameObject:
   m_ObjectHideFlags: 0

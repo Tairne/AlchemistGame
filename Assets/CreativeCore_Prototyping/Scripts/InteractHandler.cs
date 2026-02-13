@@ -28,6 +28,21 @@ public class InteractHandler : MonoBehaviour
     [SerializeField] private TMP_Text actionText;
     [SerializeField] private GameObject hintRoot;
 
+    [Header("Drag")]
+    public Sprite FistPointer;                 // иконка кулака
+    [SerializeField] private LayerMask dragLayers = ~0;
+
+    private DragInteractable _dragTarget;
+    private Rigidbody _dragRb;
+    private SpringJoint _dragJoint;
+
+    private GameObject _dragAnchorGO;
+    private Rigidbody _dragAnchorRb;
+
+    private float _dragTimeLeft;
+    private float _dragDistance;
+    private bool _isDragging;
+
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -76,6 +91,8 @@ public class InteractHandler : MonoBehaviour
             if (cinemachineBrain == null)
                 mainCam.gameObject.AddComponent<CinemachineBrain>();
         }
+
+        CreateDragAnchor();
     }
 
     void Update()
@@ -94,6 +111,28 @@ public class InteractHandler : MonoBehaviour
         {
             if (m_PointerImage != null && !m_PointerImage.gameObject.activeSelf)
                 m_PointerImage.gameObject.SetActive(true);
+        }
+
+#if ENABLE_INPUT_SYSTEM
+        bool lmbDown = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+        bool lmbUp = Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame;
+#else
+bool lmbDown = Input.GetMouseButtonDown(0);
+bool lmbUp   = Input.GetMouseButtonUp(0);
+#endif
+
+        if (_isDragging)
+        {
+            UpdateDragging();
+
+            // таймер тикает только когда не пауза (мы сюда и так не попадаем на uiOpen)
+            _dragTimeLeft -= Time.deltaTime;
+
+            if (lmbUp || _dragTimeLeft <= 0f)
+                EndDrag();
+
+            // пока тащим: никакие другие интеракты не обрабатываем
+            return;
         }
 
 #if ENABLE_INPUT_SYSTEM
@@ -117,6 +156,20 @@ public class InteractHandler : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 2.0f))
         {
+            var drag = hit.collider.GetComponentInParent<DragInteractable>();
+
+            if (drag != null && drag.CanDrag)
+            {
+                if (m_PointerImage != null && FistPointer != null)
+                    m_PointerImage.sprite = FistPointer; // опционально даже до нажатия
+
+                if (lmbDown)
+                {
+                    BeginDrag(drag, hit);
+                    return; // не запускаем обычные интеракты в этот кадр
+                }
+            }
+
             var hitGo = hit.collider.gameObject;
 
             // Ищем OnInteract по родителям от коллайдера
@@ -129,7 +182,6 @@ public class InteractHandler : MonoBehaviour
                 var interactRoot = hit.collider.GetComponentInParent<OnInteract>(true);
                 targetGo = interactRoot != null ? interactRoot.gameObject : hitGo;
 
-                // DEBUG: раскомментируй на минуту, чтобы увидеть правду
                 // Debug.Log($"HIT='{hitGo.name}' tag='{hitGo.tag}' | target='{targetGo.name}' targetTag='{targetGo.tag}' | targets={targets.Length}");
 
                 // Подсказка
@@ -183,20 +235,33 @@ public class InteractHandler : MonoBehaviour
 
     void ShowHintFor(GameObject hitObject)
     {
-        if (titleText == null || actionText == null) return;
+        if (hintRoot == null || titleText == null || actionText == null) return;
 
-        // Название
         var label = hitObject.GetComponentInParent<InteractableLabel>();
-        titleText.text = label != null ? label.DisplayName : "";
+        titleText.text = label != null ? label.DisplayName : hitObject.name;
 
-        // Действие
+        // 1) если тащим прямо сейчас
+        if (_isDragging)
+        {
+            actionText.text = "[ЛКМ] Переместить";
+            hintRoot.SetActive(true);
+            return;
+        }
+
+        // 2) если объект можно тащить
+        var drag = hitObject.GetComponentInParent<DragInteractable>();
+        if (drag != null && drag.CanDrag)
+        {
+            actionText.text = "[ЛКМ] Переместить";
+            hintRoot.SetActive(true);
+            return;
+        }
+
+        // 3) обычная логика подсказок
         var actionProvider = hitObject.GetComponentInParent<IInteractHint>();
-        var action = actionProvider != null
-            ? actionProvider.GetAction()
-            : InteractAction.None;
+        var action = actionProvider != null ? actionProvider.GetAction() : InteractAction.None;
 
         actionText.text = ActionToString(action);
-
         hintRoot.SetActive(true);
     }
 
@@ -216,5 +281,96 @@ public class InteractHandler : MonoBehaviour
     {
         if (hintRoot != null && hintRoot.activeSelf)
             hintRoot.SetActive(false);
+    }
+
+    void CreateDragAnchor()
+    {
+        if (_dragAnchorGO != null) return;
+
+        _dragAnchorGO = new GameObject("DragAnchor");
+        _dragAnchorRb = _dragAnchorGO.AddComponent<Rigidbody>();
+        _dragAnchorRb.isKinematic = true;
+        _dragAnchorRb.useGravity = false;
+    }
+
+    void BeginDrag(DragInteractable drag, RaycastHit hit)
+    {
+        CreateDragAnchor();
+
+        _dragTarget = drag;
+        _dragRb = drag.GetComponent<Rigidbody>();
+        if (_dragRb == null) return;
+
+        drag.PrepareRigidbodyForDrag(_dragRb);
+        var cam = Camera.main;
+        _dragDistance = Vector3.Distance(cam.transform.position, hit.point);
+        _dragTimeLeft = Mathf.Max(0.1f, drag.maxDragSeconds);
+
+        // ставим якорь в точку перед камерой        
+        _dragAnchorGO.transform.position = cam.transform.position + cam.transform.forward * _dragDistance;
+
+        // цепляем joint к якорю
+        _dragJoint = _dragRb.gameObject.AddComponent<SpringJoint>();
+        _dragJoint.autoConfigureConnectedAnchor = false;
+        _dragJoint.connectedBody = _dragAnchorRb;
+        _dragJoint.anchor = _dragRb.centerOfMass;
+        _dragJoint.connectedAnchor = Vector3.zero;
+
+        _dragJoint.spring = drag.spring;
+        _dragJoint.damper = drag.damper;
+        _dragJoint.maxDistance = drag.maxDistance;
+        _dragJoint.breakForce = drag.breakForce;
+        _dragJoint.breakTorque = drag.breakTorque;
+
+        _isDragging = true;
+
+        // визуал
+        if (m_PointerImage != null && FistPointer != null)
+        {
+            m_PointerImage.sprite = FistPointer;
+            m_PointerImage.transform.localScale = m_OriginalPointerSize * 3.0f;
+        }
+
+        // подсказка
+        if (hintRoot != null) hintRoot.SetActive(true);
+        if (actionText != null) actionText.text = "[ЛКМ] Переместить";
+    }
+
+    void UpdateDragging()
+    {
+        if (_dragAnchorGO == null) return;
+
+        var cam = Camera.main;
+        var targetPos = cam.transform.position + cam.transform.forward * _dragDistance;
+
+        // якорь двигаем в Update, физика подтянется через joint
+        _dragAnchorGO.transform.position = targetPos;
+
+        // чтобы игрок видел, что всё ещё тащит
+        if (actionText != null) actionText.text = "[ЛКМ] Переместить";
+
+        // если joint сломался
+        if (_dragJoint == null)
+            EndDrag();
+    }
+
+    void EndDrag()
+    {
+        _isDragging = false;
+
+        if (_dragJoint != null)
+            Destroy(_dragJoint);
+
+        _dragJoint = null;
+        _dragRb = null;
+        _dragTarget = null;
+
+        // вернуть обычный курсор
+        if (m_PointerImage != null)
+        {
+            m_PointerImage.sprite = NormalPointer;
+            m_PointerImage.color = Color.white;
+            m_PointerImage.transform.localScale = m_OriginalPointerSize;
+        }
     }
 }
