@@ -57,7 +57,7 @@ public class LockableBox : MonoBehaviour, IInteractHint
         // меняем тег на Box
         gameObject.tag = "Box";
 
-        // визуал / анимация (по желанию)
+        // визуал / анимация
         if (animator != null)
             animator.SetTrigger(openTrigger);
 

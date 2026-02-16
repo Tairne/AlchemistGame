@@ -6,5 +6,8 @@ public enum InteractAction
     Take,
     Open,
     NeedKey,
-    Use
+    Use,
+    Closed,
+    DoorClose,
+    DoorOpen
 }

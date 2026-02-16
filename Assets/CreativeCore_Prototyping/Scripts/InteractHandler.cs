@@ -125,7 +125,7 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
         {
             UpdateDragging();
 
-            // таймер тикает только когда не пауза (мы сюда и так не попадаем на uiOpen)
+            // таймер тикает только когда не пауза
             _dragTimeLeft -= Time.deltaTime;
 
             if (lmbUp || _dragTimeLeft <= 0f)
@@ -273,6 +273,9 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
             InteractAction.Open => "[E] Открыть",
             InteractAction.NeedKey => "Нужен ключ",
             InteractAction.Use => "[E] Использовать",
+            InteractAction.Closed => "Закрыто",
+            InteractAction.DoorClose => "[E] Закрыть",
+            InteractAction.DoorOpen => "[E] Открыть",
             _ => "Закрыто"
         };
     }
