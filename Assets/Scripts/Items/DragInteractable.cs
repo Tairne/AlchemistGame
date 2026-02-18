@@ -8,7 +8,7 @@ public class DragInteractable : MonoBehaviour
     public float holdDistance = 2.0f;      // на каком рассто€нии держим от камеры
     public float spring = 4000f;           // Усила удержани€Ф
     public float damper = 80f;             // демпфер
-    public float maxDistance = 0.08f;       // УрезинкаФ
+    public float maxDistance = 0.01f;       // УрезинкаФ
     public float breakForce = Mathf.Infinity;
     public float breakTorque = Mathf.Infinity;
 
@@ -19,7 +19,8 @@ public class DragInteractable : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         rb.linearDamping = 0.5f;
-        rb.angularDamping = 0.5f;
+        rb.angularDamping = 10f;
+        rb.maxAngularVelocity = 2f;
         rb.useGravity = true;
     }
 }

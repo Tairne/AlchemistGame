@@ -42,6 +42,10 @@ public class InteractHandler : MonoBehaviour
     private float _dragTimeLeft;
     private float _dragDistance;
     private bool _isDragging;
+    private RigidbodyConstraints _savedConstraints;
+    private FixedJoint _dragFixedJoint;
+    private Vector3 _anchorTargetPos;
+    private bool _savedUseGravity;
 
     void Start()
     {
@@ -93,6 +97,12 @@ public class InteractHandler : MonoBehaviour
         }
 
         CreateDragAnchor();
+    }
+
+    void FixedUpdate()
+    {
+        if (_isDragging && _dragAnchorRb != null)
+            _dragAnchorRb.MovePosition(_anchorTargetPos);
     }
 
     void Update()
@@ -288,53 +298,84 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
 
     void CreateDragAnchor()
     {
-        if (_dragAnchorGO != null) return;
+        if (_dragAnchorGO != null && _dragAnchorRb != null) return;
 
-        _dragAnchorGO = new GameObject("DragAnchor");
-        _dragAnchorRb = _dragAnchorGO.AddComponent<Rigidbody>();
-        _dragAnchorRb.isKinematic = true;
-        _dragAnchorRb.useGravity = false;
+        if (_dragAnchorGO == null)
+        {
+            _dragAnchorGO = new GameObject("DragAnchor");
+            _dragAnchorGO.hideFlags = HideFlags.HideInHierarchy;
+        }
+
+        if (_dragAnchorRb == null)
+        {
+            _dragAnchorRb = _dragAnchorGO.GetComponent<Rigidbody>();
+            if (_dragAnchorRb == null) _dragAnchorRb = _dragAnchorGO.AddComponent<Rigidbody>();
+
+            _dragAnchorRb.isKinematic = true;
+            _dragAnchorRb.useGravity = false;
+            _dragAnchorRb.interpolation = RigidbodyInterpolation.Interpolate;
+            _dragAnchorRb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        }
     }
 
     void BeginDrag(DragInteractable drag, RaycastHit hit)
     {
+        if (drag == null) return;
+
         CreateDragAnchor();
 
+        // 1) Берём Rigidbody от коллайдера
+        _dragRb = hit.rigidbody;
+
+        // 2) Фоллбек: ищем рядом (на всякий)
+        if (_dragRb == null)
+            _dragRb = drag.GetComponentInParent<Rigidbody>();
+
+        if (_dragRb == null)
+        {
+            Debug.LogError($"BeginDrag: Rigidbody NOT found. " +
+                           $"Hit='{hit.collider.name}' tag='{hit.collider.tag}'. " +
+                           $"Add Rigidbody to the object (or parent) that has this collider.", hit.collider);
+            return;
+        }
+
         _dragTarget = drag;
-        _dragRb = drag.GetComponent<Rigidbody>();
-        if (_dragRb == null) return;
+
+        // теперь безопасно
+        _savedUseGravity = _dragRb.useGravity;
+        _dragRb.useGravity = false;
+
+        _savedConstraints = _dragRb.constraints;
+        _dragRb.constraints |= RigidbodyConstraints.FreezeRotation;
 
         drag.PrepareRigidbodyForDrag(_dragRb);
+
         var cam = Camera.main;
-        _dragDistance = Vector3.Distance(cam.transform.position, hit.point);
+        if (cam == null)
+        {
+            Debug.LogError("BeginDrag: Camera.main is null. Check MainCamera tag.");
+            return;
+        }
+
         _dragTimeLeft = Mathf.Max(0.1f, drag.maxDragSeconds);
 
-        // ставим якорь в точку перед камерой        
-        _dragAnchorGO.transform.position = cam.transform.position + cam.transform.forward * _dragDistance;
+        _dragAnchorGO.transform.position = _dragRb.worldCenterOfMass;
+        _dragDistance = Vector3.Distance(cam.transform.position, _dragRb.worldCenterOfMass);
 
-        // цепляем joint к якорю
-        _dragJoint = _dragRb.gameObject.AddComponent<SpringJoint>();
-        _dragJoint.autoConfigureConnectedAnchor = false;
-        _dragJoint.connectedBody = _dragAnchorRb;
-        _dragJoint.anchor = _dragRb.centerOfMass;
-        _dragJoint.connectedAnchor = Vector3.zero;
-
-        _dragJoint.spring = drag.spring;
-        _dragJoint.damper = drag.damper;
-        _dragJoint.maxDistance = drag.maxDistance;
-        _dragJoint.breakForce = drag.breakForce;
-        _dragJoint.breakTorque = drag.breakTorque;
+        if (_dragFixedJoint != null) Destroy(_dragFixedJoint);
+        _dragFixedJoint = _dragRb.gameObject.AddComponent<FixedJoint>();
+        _dragFixedJoint.connectedBody = _dragAnchorRb;
+        _dragFixedJoint.breakForce = Mathf.Infinity;
+        _dragFixedJoint.breakTorque = Mathf.Infinity;
 
         _isDragging = true;
 
-        // визуал
         if (m_PointerImage != null && FistPointer != null)
         {
             m_PointerImage.sprite = FistPointer;
             m_PointerImage.transform.localScale = m_OriginalPointerSize * 3.0f;
         }
 
-        // подсказка
         if (hintRoot != null) hintRoot.SetActive(true);
         if (actionText != null) actionText.text = "[ЛКМ] Переместить";
     }
@@ -344,21 +385,22 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
         if (_dragAnchorGO == null) return;
 
         var cam = Camera.main;
-        var targetPos = cam.transform.position + cam.transform.forward * _dragDistance;
+        _anchorTargetPos = cam.transform.position + cam.transform.forward * _dragDistance;
 
-        // якорь двигаем в Update, физика подтянется через joint
-        _dragAnchorGO.transform.position = targetPos;
-
-        // чтобы игрок видел, что всё ещё тащит
         if (actionText != null) actionText.text = "[ЛКМ] Переместить";
-
-        // если joint сломался
-        if (_dragJoint == null)
-            EndDrag();
     }
 
     void EndDrag()
     {
+        if (_dragRb != null)
+        {
+            _dragRb.constraints = _savedConstraints;
+            _dragRb.useGravity = _savedUseGravity;
+        }
+            
+        if (_dragFixedJoint != null) Destroy(_dragFixedJoint);
+        _dragFixedJoint = null;
+
         _isDragging = false;
 
         if (_dragJoint != null)
