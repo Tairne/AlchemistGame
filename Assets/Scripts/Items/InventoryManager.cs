@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -5,12 +6,14 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     [SerializeField] private Inventory inventory = new();
+    [SerializeField] private TMP_Text _logText;
 
     public Inventory Inventory => inventory;
 
     public ItemData SelectedItem { get; private set; }
 
     public event System.Action<ItemData> OnSelectedChanged;
+    public event System.Action<ItemData> OnItemAdded;
 
     void Awake()
     {
@@ -23,11 +26,17 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
     }
 
-    public bool Add(ItemData item) => inventory.Add(item);
+    public bool Add(ItemData item)
+    {
+        var added = inventory.Add(item);
+        if (added)
+            OnItemAdded?.Invoke(item);
+
+        return added;
+    }
 
     public bool Remove(ItemData item)
     {
-        // если удалили выбранный, сбросим выбор
         var removed = inventory.Remove(item);
         if (removed && SelectedItem == item)
             Select(null);
@@ -43,4 +52,6 @@ public class InventoryManager : MonoBehaviour
         SelectedItem = item;
         OnSelectedChanged?.Invoke(SelectedItem);
     }
+
+    public TMP_Text LogText => _logText;
 }

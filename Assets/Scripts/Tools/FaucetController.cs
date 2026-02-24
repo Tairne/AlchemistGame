@@ -19,8 +19,8 @@ public class FaucetController : MonoBehaviour, IInteractHint
         if (invMgr.Inventory.Contains(glass))
         {
             Debug.Log("Налили водички");
-            invMgr.Inventory.Add(water);
-            invMgr.Inventory.Remove(glass);
+            invMgr.Add(water);      // <-- важно
+            invMgr.Remove(glass);   // <-- тоже лучше так
         }
         else
         {
