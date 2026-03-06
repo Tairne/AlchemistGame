@@ -25,5 +25,6 @@ public class LootOpener : MonoBehaviour
         }
 
         LootMenuController.Instance.Open(container);
+        container.MarkOpened();
     }
 }

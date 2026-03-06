@@ -26,6 +26,7 @@ public class InteractHandler : MonoBehaviour
     [Header("Hint UI (inside UIPrefab)")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text actionText;
+    [SerializeField] private TMP_Text statusText;
     [SerializeField] private GameObject hintRoot;
 
     [Header("Drag")]
@@ -69,6 +70,9 @@ public class InteractHandler : MonoBehaviour
 
         var actionTr = uiInstance.transform.Find("InteractHint/ActionText");
         actionText = actionTr != null ? actionTr.GetComponent<TMP_Text>() : null;
+
+        var statusTr = uiInstance.transform.Find("InteractHint/StatusText");
+        statusText = statusTr != null ? statusTr.GetComponent<TMP_Text>() : null;
 
         // CenterPoint теперь тоже лучше искать внутри uiInstance, а не по всей сцене
         var centerPointTr = uiInstance.transform.Find("CenterPoint");
@@ -253,6 +257,7 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
         // 1) если тащим прямо сейчас
         if (_isDragging)
         {
+            statusText.gameObject.SetActive(false);
             actionText.text = "[ЛКМ] Переместить";
             hintRoot.SetActive(true);
             return;
@@ -262,6 +267,7 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
         var drag = hitObject.GetComponentInParent<DragInteractable>();
         if (drag != null && drag.CanDrag)
         {
+            statusText.gameObject.SetActive(false);
             actionText.text = "[ЛКМ] Переместить";
             hintRoot.SetActive(true);
             return;
@@ -271,23 +277,56 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
         var actionProvider = hitObject.GetComponentInParent<IInteractHint>();
         var action = actionProvider != null ? actionProvider.GetAction() : InteractAction.None;
 
-        actionText.text = ActionToString(action);
+        SetAction(action);
         hintRoot.SetActive(true);
     }
 
-    string ActionToString(InteractAction action)
+    void SetAction(InteractAction action)
     {
-        return action switch
+        statusText.gameObject.SetActive(false);
+
+        switch (action)
         {
-            InteractAction.Take => "[E] Взять",
-            InteractAction.Open => "[E] Открыть",
-            InteractAction.NeedKey => "Нужен ключ",
-            InteractAction.Use => "[E] Использовать",
-            InteractAction.Closed => "Закрыто",
-            InteractAction.DoorClose => "[E] Закрыть",
-            InteractAction.DoorOpen => "[E] Открыть",
-            _ => "Закрыто"
-        };
+            case InteractAction.Take:
+                actionText.text = "[E] Взять";
+                break;
+
+            case InteractAction.Open:
+                actionText.text = "[E] Открыть";
+                break;
+
+            case InteractAction.Use:
+                actionText.text = "[E] Использовать";
+                break;
+
+            case InteractAction.DoorOpen:
+                actionText.text = "[E] Открыть";
+                break;
+
+            case InteractAction.DoorClose:
+                actionText.text = "[E] Закрыть";
+                break;
+
+            case InteractAction.Empty:
+                actionText.text = "[E] Открыть";
+                statusText.text = "(пусто)";
+                statusText.gameObject.SetActive(true);
+                break;
+
+            case InteractAction.NeedKey:
+                actionText.text = "Закрыто";
+                statusText.text = "(нужен ключ)";
+                statusText.gameObject.SetActive(true);
+                break;
+
+            case InteractAction.Closed:
+                actionText.text = "Закрыто";
+                break;
+
+            default:
+                actionText.text = "";
+                break;
+        }
     }
 
     void HideHint()

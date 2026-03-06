@@ -9,14 +9,30 @@ public class LootContainer : MonoBehaviour, IInteractHint
     [Header("One-time loot")]
     public bool oneTime = true;
 
+    private bool opened;
+
     public bool IsEmpty => items == null || items.Count == 0;
 
-    public InteractAction GetAction() => InteractAction.Open;
+    public InteractAction GetAction()
+    {
+        if (opened && oneTime)
+            return InteractAction.Empty;
 
-    public List<ItemData> GetItems() => items;
+        return InteractAction.Open;
+    }
+
+    public List<ItemData> GetItems()
+    {
+        return items;
+    }
 
     public void Clear()
     {
         items.Clear();
+    }
+
+    public void MarkOpened()
+    {
+        opened = true;
     }
 }

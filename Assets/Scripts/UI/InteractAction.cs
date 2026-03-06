@@ -9,5 +9,6 @@ public enum InteractAction
     Use,
     Closed,
     DoorClose,
-    DoorOpen
+    DoorOpen,
+    Empty
 }
