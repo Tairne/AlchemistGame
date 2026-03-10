@@ -10,5 +10,7 @@ public enum InteractAction
     Closed,
     DoorClose,
     DoorOpen,
-    Empty
+    Empty,
+    FireOn,
+    FireOff
 }

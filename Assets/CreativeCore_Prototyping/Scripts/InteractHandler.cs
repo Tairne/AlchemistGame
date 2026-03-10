@@ -323,6 +323,14 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
                 actionText.text = "Закрыто";
                 break;
 
+            case InteractAction.FireOn:
+                actionText.text = "[E] Зажечь";
+                break;
+
+            case InteractAction.FireOff:
+                actionText.text = "[E] Потушить";
+                break;
+
             default:
                 actionText.text = "";
                 break;

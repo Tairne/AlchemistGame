@@ -50,9 +50,9 @@ public class StandPanelController : MonoBehaviour, IInteractHint
 
     public void OpenStand()
     {
-        bool pass1 = num1.text == "12";
-        bool pass2 = num2.text == "34";
-        bool pass3 = num3.text == "56";
+        bool pass1 = num1.text == "69";
+        bool pass2 = num2.text == "77";
+        bool pass3 = num3.text == "42";
 
         if (pass1 && pass2 && pass3)
         {
