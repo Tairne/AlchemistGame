@@ -11,4 +11,8 @@ public class ItemData : ScriptableObject
 
     [TextArea] public string description;
     public Sprite icon;
+
+    public bool canRead;
+
+    public NoteContent note;
 }

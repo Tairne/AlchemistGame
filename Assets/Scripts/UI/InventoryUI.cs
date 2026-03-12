@@ -15,6 +15,9 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Image detailsIcon;
     [SerializeField] private TMP_Text detailsTitle;
     [SerializeField] private TMP_Text detailsDescription;
+    [SerializeField] private Button readButton;
+
+    private ItemData _selectedItem;
 
     void OnEnable()
     {
@@ -30,6 +33,9 @@ public class InventoryUI : MonoBehaviour
 
     void Start()
     {
+        if (readButton != null)
+            readButton.onClick.AddListener(OnReadClicked);
+
         Rebuild();
         ShowDetails(null);
     }
@@ -39,11 +45,9 @@ public class InventoryUI : MonoBehaviour
         if (itemsContainer == null || itemButtonPrefab == null) return;
         if (InventoryManager.Instance == null) return;
 
-        // очистить старые кнопки
         for (int i = itemsContainer.childCount - 1; i >= 0; i--)
             Destroy(itemsContainer.GetChild(i).gameObject);
 
-        // создать новые
         var inv = InventoryManager.Instance.Inventory;
         foreach (var item in inv.Items)
         {
@@ -54,19 +58,52 @@ public class InventoryUI : MonoBehaviour
 
     void OnItemClicked(ItemData item)
     {
+        _selectedItem = item;
         InventoryManager.Instance.Select(item);
         ShowDetails(item);
     }
 
     public void ShowDetails(ItemData item)
     {
-        if (detailsTitle != null) detailsTitle.text = item != null ? item.title : "";
-        if (detailsDescription != null) detailsDescription.text = item != null ? item.description : "";
+        _selectedItem = item;
+
+        if (detailsTitle != null)
+            detailsTitle.text = item != null ? item.title : "";
+
+        if (detailsDescription != null)
+            detailsDescription.text = item != null ? item.description : "";
 
         if (detailsIcon != null)
         {
             detailsIcon.sprite = item != null ? item.icon : null;
             detailsIcon.enabled = (item != null && item.icon != null);
         }
+
+        if (readButton != null)
+        {
+            bool canShowRead =
+                item != null &&
+                item.canRead &&
+                item.note != null;
+
+            readButton.gameObject.SetActive(canShowRead);
+        }
+    }
+
+    private void OnReadClicked()
+    {
+        if (_selectedItem == null)
+            return;
+
+        if (!_selectedItem.canRead || _selectedItem.note == null)
+            return;
+
+        if (NoteReaderUI.Instance == null)
+        {
+            Debug.LogWarning("NoteReaderUI.Instance is null");
+            return;
+        }
+
+        NoteReaderUI.Instance.Open(_selectedItem.note);
     }
 }
