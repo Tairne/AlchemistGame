@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Crystall
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: Crystall
-  title: "\u041A\u0440\u0438\u0441\u0442\u0430\u043B\u043B"
-  description: "\u041A\u0440\u0430\u0441\u0438\u0432\u044B\u0439 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B
-    \u0434\u043B\u044F \u0437\u0435\u043B\u044C\u044F"
+  title: "\u0421\u0438\u043D\u0438\u0439 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B"
+  description: "\u0421\u0438\u043D\u0438\u0439 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B,
+    \u043F\u043E\u0445\u043E\u0436\u0438\u0439 \u043D\u0430 \u0441\u0430\u043F\u0444\u0438\u0440"
   icon: {fileID: 21300000, guid: 91b1e60a55e4e8747ab3aa9a6003e685, type: 3}
+  canRead: 0
+  note:
+    title: 
+    text: 
+    illustrationPrefab: {fileID: 0}

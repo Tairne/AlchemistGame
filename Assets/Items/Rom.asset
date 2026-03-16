@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b078e9d89990ee44681996a5e892edba, type: 3}
-  m_Name: Potion
+  m_Name: Rom
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  id: Potion
-  title: "\u0417\u0435\u043B\u044C\u0435 \u0434\u0435\u0433\u0440\u0430\u0434\u0430\u0446\u0438\u0438"
-  description: "\u0423\u0440\u0430, \u043C\u044B \u0441\u0432\u0430\u0440\u0438\u043B\u0438
-    \u0437\u0435\u043B\u044C\u0435!"
+  id: rom
+  title: "\u0420\u043E\u043C"
+  description: "\u0420\u043E\u043C \u043D\u0435 \u0441\u0430\u043C\u043E\u0433\u043E
+    \u043B\u0443\u0447\u0448\u0435\u0433\u043E \u043A\u0430\u0447\u0435\u0441\u0442\u0432\u0430
+    \u0438 \u044F\u0432\u043D\u043E \u0440\u0430\u0437\u0431\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0439"
   icon: {fileID: 21300000, guid: 3cc81e0caeab25d4795ce4d3f3860f67, type: 3}
   canRead: 0
   note:
