@@ -13,6 +13,10 @@ public class StandPanelController : MonoBehaviour, IInteractHint
     [SerializeField] private TMP_InputField num2;
     [SerializeField] private TMP_InputField num3;
     [SerializeField] private TMP_Text resultText;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private AudioClip successSound;
+    [SerializeField] private AudioClip errorSound;
 
     public InteractAction GetAction() => InteractAction.Use;
     void Awake()
@@ -34,6 +38,7 @@ public class StandPanelController : MonoBehaviour, IInteractHint
         }
 
         var opened = UIWindowsManager.Instance.Open(standPanel);
+        audioSource.PlayOneShot(openSound);
         if (!opened)
             return;
     }
@@ -41,9 +46,9 @@ public class StandPanelController : MonoBehaviour, IInteractHint
     public void Close()
     {
         standPanel.SetActive(false);
-        num1.text = "00";
-        num2.text = "00";
-        num3.text = "00";
+        num1.text = "";
+        num2.text = "";
+        num3.text = "";
         resultText.text = "";
         UIWindowsManager.Instance.CloseAll();
     }
@@ -59,11 +64,13 @@ public class StandPanelController : MonoBehaviour, IInteractHint
             glassWalls.SetActive(false);
             resultText.text = "Успешно!";
             resultText.color = Color.green;
+            audioSource.PlayOneShot(successSound);
         }
         else
         {
             resultText.text = "Неверно!";
             resultText.color = Color.red;
+            audioSource.PlayOneShot(errorSound);
         }
     }
 }

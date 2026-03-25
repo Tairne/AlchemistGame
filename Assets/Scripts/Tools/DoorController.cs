@@ -1,7 +1,14 @@
+using System.Collections;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour, IInteractHint
 {
+    [SerializeField] private AudioSource doorAudioSource;
+    [SerializeField] private AudioSource playerAudioSource;
+    [SerializeField] private AudioClip doorSound;
+    [SerializeField] private AudioClip lockMechSound;
+    [SerializeField] private AudioClip buttonSound;
+
     private Animator _anim;
     private bool _isOpen = false;
 
@@ -35,14 +42,16 @@ public class DoorController : MonoBehaviour, IInteractHint
             return;
 
         if (!_isOpen)
-        {
+        {            
             _anim.SetTrigger("Open");
             _isOpen = true;
+            doorAudioSource.PlayOneShot(doorSound);
         }
         else
         {
             _anim.SetTrigger("Close");
             _isOpen = false;
+            doorAudioSource.PlayOneShot(doorSound);
         }
     }
 
@@ -50,22 +59,48 @@ public class DoorController : MonoBehaviour, IInteractHint
     {
         if (!_isOpen)
         {
-            _anim.SetTrigger("Open");
-            _isOpen = true;
-        }           
-        
+            StartCoroutine(OpenRoutine());
+        }
+
+        playerAudioSource.PlayOneShot(buttonSound);
         SetTagRecursively(gameObject, "Tool");
+    }
+
+    private IEnumerator OpenRoutine()
+    {
+        _isOpen = true;
+
+        doorAudioSource.PlayOneShot(lockMechSound);
+
+        yield return new WaitForSeconds(lockMechSound.length);
+
+        _anim.SetTrigger("Open");
+
+        doorAudioSource.PlayOneShot(doorSound);
     }
 
     public void Close()
     {
         if (_isOpen)
         {
-            _anim.SetTrigger("Close");
-            _isOpen = false;
+            StartCoroutine(CloseRoutine());
         }
-        
+
+        playerAudioSource.PlayOneShot(buttonSound);
         SetTagRecursively(gameObject, "Lock");
+    }
+
+    private IEnumerator CloseRoutine()
+    {
+        _isOpen = false;
+
+        doorAudioSource.PlayOneShot(lockMechSound);
+
+        yield return new WaitForSeconds(lockMechSound.length);
+
+        _anim.SetTrigger("Close");
+
+        doorAudioSource.PlayOneShot(doorSound);
     }
 
     void SetTagRecursively(GameObject obj, string newTag)

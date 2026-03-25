@@ -17,6 +17,10 @@ public class CraftStationController : MonoBehaviour, IInteractHint
     [SerializeField] private GameObject enableOnCraft;
     [SerializeField] private bool disableSelfOnCraft = false;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip craftSound;
+
     public InteractAction GetAction() => InteractAction.Use;
 
     void Start()
@@ -80,6 +84,8 @@ public class CraftStationController : MonoBehaviour, IInteractHint
         foreach (var item in recipe.inputs)
             if (!inv.Inventory.Contains(item))
                 return;
+
+        audioSource.PlayOneShot(craftSound);
 
         foreach (var item in recipe.inputs)
             inv.Remove(item);

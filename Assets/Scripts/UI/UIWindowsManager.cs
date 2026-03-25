@@ -9,6 +9,8 @@ public class UIWindowsManager : MonoBehaviour
     [SerializeField] private bool pauseGame = true;
     [SerializeField] private FirstPersonController fpsController;
     [SerializeField] private GameObject centerPoint;
+    [SerializeField] private AudioSource soundSource;
+    [SerializeField] private AudioClip sound;
     [Header("Blocking")]
     [SerializeField] private GameObject inventoryPanel;
 
@@ -25,6 +27,7 @@ public class UIWindowsManager : MonoBehaviour
         _openWindow = null;
         IsAnyWindowOpen = false;
         ApplyState(false);
+        soundSource.PlayOneShot(sound);
     }
 
     public bool Open(GameObject window)
@@ -39,6 +42,9 @@ public class UIWindowsManager : MonoBehaviour
         window.SetActive(true);
         _openWindow = window;
         IsAnyWindowOpen = true;
+
+        if(window == inventoryPanel)
+            soundSource.PlayOneShot(sound);
 
         ApplyState(true);
         return true;

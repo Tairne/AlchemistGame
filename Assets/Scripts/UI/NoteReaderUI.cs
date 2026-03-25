@@ -10,6 +10,8 @@ public class NoteReaderUI : MonoBehaviour
     [SerializeField] private GameObject root;
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text contentText;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip paperSound;
 
     [Header("Illustration")]
     [SerializeField] private GameObject illustrationContainer;
@@ -53,6 +55,7 @@ public class NoteReaderUI : MonoBehaviour
 
         if (scrollRect != null)
             scrollRect.verticalNormalizedPosition = 1f;
+        audioSource.PlayOneShot(paperSound);
     }
 
     public void Close()

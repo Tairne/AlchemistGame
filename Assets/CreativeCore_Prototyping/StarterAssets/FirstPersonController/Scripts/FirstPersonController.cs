@@ -64,9 +64,17 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
-	
+        // sound
+        [SerializeField] private AudioSource footstepSource;
+        [SerializeField] private AudioClip footstepClip;
+        [SerializeField] private float walkStepInterval = 0.5f;
+        [SerializeField] private float sprintStepInterval = 0.35f;
+
+        private float _footstepTimer;
+
+
 #if ENABLE_INPUT_SYSTEM
-		private PlayerInput _playerInput;
+        private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
@@ -95,7 +103,14 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
-		}
+
+            footstepSource = _mainCamera.GetComponent<AudioSource>();
+
+            if (footstepSource == null)
+            {
+                Debug.LogError("На камере нет AudioSource. Кто это вообще настраивал?", this);
+            }
+        }
 
 		private void Start()
 		{
@@ -204,7 +219,9 @@ namespace StarterAssets
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		}
+
+            HandleFootsteps();
+        }
 
 		private void JumpAndGravity()
 		{
@@ -285,6 +302,42 @@ namespace StarterAssets
                 _input.jump = false;
                 _input.sprint = false;
             }
+        }
+
+        private void HandleFootsteps()
+        {
+            if (!_controller.isGrounded)
+            {
+                _footstepTimer = 0f;
+                return;
+            }
+
+            if (_input.move == Vector2.zero || _speed < 0.1f)
+            {
+                _footstepTimer = 0f;
+                return;
+            }
+
+            float stepInterval = _input.sprint ? sprintStepInterval : walkStepInterval;
+
+            _footstepTimer -= Time.deltaTime;
+
+            if (_footstepTimer <= 0f)
+            {
+                if (footstepSource != null && footstepClip != null)
+                    PlayFootstep();
+
+                _footstepTimer = stepInterval;
+            }
+        }
+        private void PlayFootstep()
+        {
+            if (footstepSource == null || footstepClip == null)
+                return;
+
+            footstepSource.pitch = Random.Range(0.93f, 1.07f);
+            footstepSource.volume = Random.Range(0.85f, 1f);
+            footstepSource.PlayOneShot(footstepClip);
         }
     }
 }

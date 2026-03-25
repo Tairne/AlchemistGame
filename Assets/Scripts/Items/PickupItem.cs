@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PickupItem : MonoBehaviour, IInteractHint
 {
+    [SerializeField] private AudioClip pickSound;
+    [SerializeField] private AudioSource pickSoundSource;
+
     public ItemData item;
 
     public InteractAction GetAction() => InteractAction.Take;
@@ -27,6 +30,7 @@ public class PickupItem : MonoBehaviour, IInteractHint
             return;
         }
 
+        pickSoundSource.PlayOneShot(pickSound);
         Debug.Log($"Added to inventory: {item.id} ({item.title})");
         gameObject.SetActive(false);
     }

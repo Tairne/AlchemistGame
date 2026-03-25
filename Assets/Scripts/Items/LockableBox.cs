@@ -11,6 +11,8 @@ public class LockableBox : MonoBehaviour, IInteractHint
     [SerializeField] private GameObject openedVisual; // optional: модель/крышка открытого состояния
     [SerializeField] private Animator animator;       // optional
     [SerializeField] private string openTrigger = "Open";
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
 
     public InteractAction GetAction()
     {
@@ -61,6 +63,7 @@ public class LockableBox : MonoBehaviour, IInteractHint
         if (animator != null)
             animator.SetTrigger(openTrigger);
 
+        audioSource.PlayOneShot(openSound);
         if (closedVisual != null) closedVisual.SetActive(false);
         if (openedVisual != null) openedVisual.SetActive(true);
     }

@@ -4,6 +4,8 @@ public class FaucetController : MonoBehaviour, IInteractHint
 {
     [SerializeField] private ItemData glass;
     [SerializeField] private ItemData water;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip waterSound;
 
     public InteractAction GetAction() => InteractAction.Use;
 
@@ -18,13 +20,13 @@ public class FaucetController : MonoBehaviour, IInteractHint
 
         if (invMgr.Inventory.Contains(glass))
         {
-            Debug.Log("Налили водички");
-            invMgr.Add(water);      // <-- важно
-            invMgr.Remove(glass);   // <-- тоже лучше так
+            audioSource.PlayOneShot(waterSound);
+            invMgr.Add(water);
+            invMgr.Remove(glass);
         }
         else
         {
-            Debug.Log("Водички не налили, но пошуршали");
+            audioSource.PlayOneShot(waterSound);
         }
     }
 }

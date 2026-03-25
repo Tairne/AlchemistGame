@@ -3,6 +3,8 @@ using UnityEngine;
 public class LootOpener : MonoBehaviour
 {
     [SerializeField] private LootContainer container;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
 
     public void Open()
     {
@@ -26,5 +28,7 @@ public class LootOpener : MonoBehaviour
 
         LootMenuController.Instance.Open(container);
         container.MarkOpened();
+
+        audioSource.PlayOneShot(openSound);
     }
 }
