@@ -48,6 +48,9 @@ public class InteractHandler : MonoBehaviour
     private Vector3 _anchorTargetPos;
     private bool _savedUseGravity;
 
+    private GameObject _currentHighlighted;
+    private int _originalLayer;
+
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -196,7 +199,7 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
                 var interactRoot = hit.collider.GetComponentInParent<OnInteract>(true);
                 targetGo = interactRoot != null ? interactRoot.gameObject : hitGo;
 
-                // Debug.Log($"HIT='{hitGo.name}' tag='{hitGo.tag}' | target='{targetGo.name}' targetTag='{targetGo.tag}' | targets={targets.Length}");
+                SetHighlight(targetGo);
 
                 // Подсказка
                 ShowHintFor(targetGo);
@@ -231,11 +234,13 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
             else
             {
                 HideHint();
+                ResetHighlight();
             }
         }
         else
         {
             HideHint();
+            ResetHighlight();
         }
 
         // Сброс прицела, если нет интерактива
@@ -463,6 +468,39 @@ bool lmbUp   = Input.GetMouseButtonUp(0);
             m_PointerImage.sprite = NormalPointer;
             m_PointerImage.color = Color.white;
             m_PointerImage.transform.localScale = m_OriginalPointerSize;
+        }
+    }
+
+    void SetHighlight(GameObject go)
+    {
+        if (_currentHighlighted == go) return;
+
+        ResetHighlight();
+
+        _currentHighlighted = go;
+        _originalLayer = go.layer;
+
+        int highlightLayer = LayerMask.NameToLayer("Highlighted");
+
+        SetLayerRecursively(go, highlightLayer);
+    }
+
+    void ResetHighlight()
+    {
+        if (_currentHighlighted != null)
+        {
+            SetLayerRecursively(_currentHighlighted, _originalLayer);
+            _currentHighlighted = null;
+        }
+    }
+
+    void SetLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
         }
     }
 }
