@@ -15692,6 +15692,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4867953396367456, guid: d13fce7de3764704598f3d1300a7586c, type: 3}
   m_PrefabInstance: {fileID: 569272711}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &573617617 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4582801250647838, guid: 546b86b9cac40df49bb5e0d69ff0178d, type: 3}
+  m_PrefabInstance: {fileID: 1022725341}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &578083961 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4350637049652996, guid: ac1d6bc633cb75f43b455f34daf7fd73, type: 3}
@@ -26284,6 +26289,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -132736294838449734, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9005220659476430818, guid: 2d3a85ecde41a8246a79669975912b74, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -26512,7 +26521,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1949234445}
     m_Modifications:
     - target: {fileID: 1420602363543448, guid: 546b86b9cac40df49bb5e0d69ff0178d, type: 3}
       propertyPath: m_Name
@@ -36506,7 +36515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIPrefab: {fileID: 2053657334794232957, guid: 1dde569fd569d4245a97ab08da15b334, type: 3}
   ItemPointer: {fileID: 21300000, guid: 9b9df0d1c89e19847bdfaa93d90b74ee, type: 3}
-  BoxPointer: {fileID: 21300000, guid: af0ae2dbf3d1efb4f82af377950704a2, type: 3}
+  BoxPointer: {fileID: 21300000, guid: f072b8cad3f56ae4ba2b5cbae3f94767, type: 3}
   LockPointer: {fileID: 21300000, guid: b3927c3d765c4454aa614d50d9b61a2b, type: 3}
   ToolPointer: {fileID: 21300000, guid: d446fb1edf3fda1438c109533a5d527e, type: 3}
   DefaultInteractPointer: {fileID: 21300000, guid: d446fb1edf3fda1438c109533a5d527e, type: 3}
@@ -51249,6 +51258,7 @@ Transform:
   - {fileID: 1789185293}
   - {fileID: 78186833}
   - {fileID: 1226711001}
+  - {fileID: 573617617}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1952621058 stripped
@@ -55665,5 +55675,4 @@ SceneRoots:
   - {fileID: 1235697083}
   - {fileID: 64098493}
   - {fileID: 1821131507}
-  - {fileID: 1022725341}
   - {fileID: 6167737647620267825}

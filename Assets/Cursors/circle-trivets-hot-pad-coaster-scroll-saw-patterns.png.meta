@@ -1,0 +1,231 @@
+fileFormatVersion: 2
+guid: 73c52d1688dbb6946a85863a4c5a8308
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: circle-trivets-hot-pad-coaster-scroll-saw-patterns_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 716
+        width: 667
+        height: 668
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 292b68062af13004a8600b831d247bfd
+      internalID: 1422543083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circle-trivets-hot-pad-coaster-scroll-saw-patterns_2
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 716
+        width: 667
+        height: 668
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32e66df08a2ed1245a30bc0463894c9a
+      internalID: -1704968072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circle-trivets-hot-pad-coaster-scroll-saw-patterns_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 667
+        height: 668
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb0922c967a6ff4c87f6f4ad60c4efb
+      internalID: -324202886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circle-trivets-hot-pad-coaster-scroll-saw-patterns_23
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 0
+        width: 617
+        height: 670
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e84a0b7710bd8b4abf5437cd185bc00
+      internalID: 1225409504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 52c419d313e8e4c40b289a883f3cee81
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_0: 1422543083
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_1: -413238812
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_10: 1372035282
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_11: -1785757304
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_12: -1886073417
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_13: 926565051
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_14: -1653019632
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_15: -308550878
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_16: 1267272326
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_17: 1923124512
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_18: 1990792643
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_19: -315585298
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_2: -1704968072
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_20: -1685659524
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_21: -1218404344
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_22: -324202886
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_23: 1225409504
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_3: -411081223
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_4: -1012778473
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_5: -1920496309
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_6: 1804795784
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_7: 1229142286
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_8: -12892652
+      circle-trivets-hot-pad-coaster-scroll-saw-patterns_9: 2143753245
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
